@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = files
   spec.require_paths << "lib"
-  spec.requirements << "jar 'org.apache:kafka', '0.7.2'"
+  spec.requirements << "jar 'org.apache.kafka', '0.7.2'"
   spec.requirements << "jar 'org.slf4j:slf4j-api', '1.6.4'"
   spec.requirements << "jar 'org.I0Itec:zkclient', '0.1'"
   spec.requirements << "jar 'org.apache:zookeeper', '3.3.4'"
