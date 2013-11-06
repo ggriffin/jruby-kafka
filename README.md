@@ -1,8 +1,10 @@
 # Jruby::Kafka
 
+This is a fork of Jruby::Kafka that works with Kafka 0.7.x
+
 ## Prerequisites
 
-* [Apache Kafka] version 0.8 beta 1 installed and running.
+* [Apache Kafka] version 0.7 installed and running.
 
 * [JRuby] installed.
 
@@ -11,9 +13,10 @@
 
 ## About
 
-This gem is primarily used to wrap most of the [Kafka 0.8beta1 high level consumer] API into jruby.
+This gem is primarily used to wrap most of the [Kafka 0.7 high level consumer] API into jruby.
 The [Kafka Consumer Group Example] is pretty much ported to this library.
 
+Note: The following references are not entirely applicable to Kafka 0.7
 [Kafka 0.8beta1 high level consumer]: http://kafka.apache.org/documentation.html#highlevelconsumerapi
 [Kafka Consumer Group Example]: https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example
 

@@ -8,6 +8,7 @@ require "jruby-kafka/error"
 
 java_import 'java.util.concurrent.ExecutorService'
 java_import 'java.util.concurrent.Executors'
+java_import 'org.I0Itec.zkclient.ZkClient'
 java_import 'org.I0Itec.zkclient.exception.ZkException'
 
 class Kafka::Group
@@ -43,7 +44,7 @@ class Kafka::Group
     @auto_commit_interval = '1000'
     @running = false
     @rebalance_max_retries = '4'
-    @rebalance_backoff_ms = '2000'
+    @backoff_increment_ms = '2000'
     @socket_timeout_ms = "#{30 * 1000}"
     @socket_receive_buffer_bytes = "#{64 * 1024}"
     @fetch_message_max_bytes = "#{1024 * 1024}"
@@ -73,8 +74,8 @@ class Kafka::Group
       @rebalance_max_retries = "#{options[:rebalance_max_retries]}"
     end
 
-    if options[:rebalance_backoff_ms]
-      @rebalance_backoff_ms = "#{options[:rebalance_backoff_ms]}"
+    if options[:backoff_increment_ms]
+      @backoff_increment_ms = "#{options[:backoff_increment_ms]}"
     end
 
     if options[:socket_timeout_ms]
@@ -153,7 +154,7 @@ class Kafka::Group
   def run(a_numThreads, a_queue)
     begin
       if @auto_offset_reset == 'smallest'
-        Java::kafka::utils::ZkUtils.maybeDeletePath(@zk_connect, "/consumers/#{@group_id}")
+        tryCleanupZookeeper(@zk_connect, @group_id)
       end
 
       @consumer = Java::kafka::consumer::Consumer.createJavaConsumerConnector(createConsumerConfig())
@@ -182,27 +183,35 @@ class Kafka::Group
     @running
   end
 
+  def tryCleanupZookeeper(zk_connect, group_id)
+    begin
+      dir = "/consumers/" + group_id
+      zk = ZkClient.new(zk_connect, 30*1000, 30*1000, Java::kafka::utils::ZKStringSerializer)
+      zk.deleteRecursive(dir)
+      zk.close()
+    rescue Exception => e
+      #puts "swallowed: #{e.message}"
+    end
+  end
+
   private
   def createConsumerConfig()
     properties = java.util.Properties.new()
-    properties.put("zookeeper.connect", @zk_connect)
-    properties.put("group.id", @group_id)
-    properties.put("zookeeper.connection.timeout.ms", @zk_connect_timeout)
-    properties.put("zookeeper.session.timeout.ms", @zk_session_timeout)
-    properties.put("zookeeper.sync.time.ms", @zk_sync_time)
-    properties.put("auto.commit.interval.ms", @auto_commit_interval)
-    properties.put("auto.offset.reset", @auto_offset_reset)
-    properties.put("rebalance.max.retries", @rebalance_max_retries)
-    properties.put("rebalance.backoff.ms", @rebalance_backoff_ms)
+    properties.put("zk.connect", @zk_connect)
+    properties.put("groupid", @group_id)
+    properties.put("zk.connectiontimeout.ms", @zk_connect_timeout)
+    properties.put("zk.sessiontimeout.ms", @zk_session_timeout)
+    properties.put("zk.synctime.ms", @zk_sync_time)
+    properties.put("autocommit.interval.ms", @auto_commit_interval)
+    properties.put("autooffset.reset", @auto_offset_reset)
+    properties.put("rebalance.retries.max", @rebalance_max_retries)
+    properties.put("backoff.increment.ms", @backoff_increment_ms)
     properties.put("socket.timeout.ms", @socket_timeout_ms)
-    properties.put("socket.receive.buffer.bytes", @socket_receive_buffer_bytes)
-    properties.put("fetch.message.max.bytes", @fetch_message_max_bytes)
-    properties.put("auto.commit.enable", @auto_commit_enable)
-    properties.put("queued.max.message.chunks", @queued_max_message_chunks)
-    properties.put("fetch.min.bytes", @fetch_min_bytes)
-    properties.put("fetch.wait.max.ms", @fetch_wait_max_ms)
-    properties.put("refresh.leader.backoff.ms", @refresh_leader_backoff_ms)
-    properties.put("consumer.timeout.ms", @consumer_timeout_ms)
+    properties.put("socket.receive.buffer", @socket_receive_buffer_bytes)
+    properties.put("fetch.size", @fetch_message_max_bytes)
+    properties.put("autocommit.enable", @auto_commit_enable)
+    properties.put("queuedchunks.max", @queued_max_message_chunks)
+    properties.put("mirror.consumer.numthreads", 1)
     return Java::kafka::consumer::ConsumerConfig.new(properties)
   end
 end
