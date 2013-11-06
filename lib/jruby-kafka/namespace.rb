@@ -1,3 +1,3 @@
-module Kafka
+module JRubyKafka
 
 end

@@ -11,7 +11,7 @@ java_import 'java.util.concurrent.Executors'
 java_import 'org.I0Itec.zkclient.ZkClient'
 java_import 'org.I0Itec.zkclient.exception.ZkException'
 
-class Kafka::Group
+class JRubyKafka::Group
   @consumer
   @executor
   @topic
@@ -172,7 +172,7 @@ class Kafka::Group
 
     threadNumber = 0
     for stream in streams
-      @executor_submit.call(Kafka::Consumer.new(stream, threadNumber, a_queue, @consumer_restart_on_error, @consumer_restart_sleep_ms))
+      @executor_submit.call(JRubyKafka::Consumer.new(stream, threadNumber, a_queue, @consumer_restart_on_error, @consumer_restart_sleep_ms))
       threadNumber += 1
     end
     @running = true

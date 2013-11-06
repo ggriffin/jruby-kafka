@@ -6,7 +6,7 @@ java_import 'kafka.consumer.KafkaStream'
 java_import 'kafka.common.ConsumerRebalanceFailedException'
 java_import 'kafka.consumer.ConsumerTimeoutException'
 
-class Kafka::Consumer
+class JRubyKafka::Consumer
   include Java::JavaLang::Runnable
   java_signature 'void run()'
 

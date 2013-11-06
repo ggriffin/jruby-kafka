@@ -1,6 +1,6 @@
 require "java"
 require "jruby-kafka/namespace"
 
-class Kafka::Client
+class JRubyKafka::Client
 
 end
