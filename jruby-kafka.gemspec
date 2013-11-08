@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.name          = "jruby-kafka"
-  spec.version       = "0.0.9"
+  spec.version       = "0.0.10"
   spec.authors       = ["Joseph Lawson"]
   spec.email         = ["joe@joekiller.com"]
   spec.description   = "primarily to take advantage of consumer groups"
@@ -17,11 +17,11 @@ Gem::Specification.new do |spec|
   spec.files         = files
   spec.require_paths << "lib"
 
-#  spec.requirements << "jar 'org.slf4j:slf4j-api', '1.6.4'"
-#  spec.requirements << "jar 'com.github.sgroschupf:zkclient', '0.1'"
-#  spec.requirements << "jar 'org.apache.zookeeper:zookeeper', '3.3.4'"
-#  spec.requirements << "jar 'log4j:log4j', '1.2.17'"
-#  spec.requirements << "jar 'org.scala-lang:scala-library', '2.8.0'"
-#  spec.requirements << "jar 'net.sf.jopt-simple:jopt-simple', '3.2'"
-#  spec.requirements << "jar 'com.visiblemeasures.kafka:kafka', '0.7.2'"
+  spec.requirements << "jar 'org.slf4j:slf4j-api', '1.6.4'"
+  spec.requirements << "jar 'com.github.sgroschupf:zkclient', '0.1'"
+  spec.requirements << "jar 'org.apache.zookeeper:zookeeper', '3.3.4'"
+  spec.requirements << "jar 'log4j:log4j', '1.2.17'"
+  spec.requirements << "jar 'org.scala-lang:scala-library', '2.8.0'"
+  spec.requirements << "jar 'net.sf.jopt-simple:jopt-simple', '3.2'"
+  spec.requirements << "jar 'com.visiblemeasures.kafka:kafka', '0.7.2'"
 end

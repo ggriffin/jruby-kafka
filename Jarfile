@@ -1,4 +1,4 @@
-source 'http://bld200/nexus/content/repositories/vmc-vendor'
+repository :first, 'http://bld200/nexus/content/repositories/vmc-vendor'
 jar 'org.slf4j:slf4j-api', '1.6.4'
 jar 'com.github.sgroschupf:zkclient', '0.1'
 jar 'org.apache.zookeeper:zookeeper', '3.3.4'
